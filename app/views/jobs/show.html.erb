@@ -1,0 +1,23 @@
+<% provide(:title, @job.title) %>
+<h1>
+    <%= @job.title %>
+</h1>
+<br />
+<p>
+    <%= @job.description %>
+</p>
+
+<% if current_user.admin? %>
+    <p><%= link_to "Edit Job Description", edit_job_path %></p>
+    <% if @job.user_ids.empty? %>
+        <div class="alert alert-danger">
+            This job has not been assigned to any recruiters!
+        </div>
+    <% else %>
+        <p style="text-align: left;  font-weight: bold;">Currently Assigned To:</p>
+        <% @job.user_ids.each do |user_id| %>
+            <% user = User.find(user_id) %>
+            <p><%= link_to user.name, user %></p>
+        <% end %>
+    <% end %>
+<% end %>

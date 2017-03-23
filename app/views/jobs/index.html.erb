@@ -1,0 +1,25 @@
+<% provide(:title, 'All Jobs') %>
+<h1>All Jobs</h1>
+
+<div class="col-sm-2">
+<%= button_to "Create New Job", new_job_path, {method: 'get', class: "btn btn-small btn-primary left-button"} %>
+</div>
+<br /><br />
+
+<% if @jobs.empty? %>
+    <div class="alert alert-danger">
+      There are no jobs!
+    </div>
+<% else %>
+    <%= will_paginate @jobs %>
+    <ul class="users">
+        <%= render @jobs %>
+    </ul>
+    <%= will_paginate @jobs %>
+<% end %>
+
+
+
+
+
+

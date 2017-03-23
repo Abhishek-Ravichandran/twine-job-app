@@ -1,0 +1,76 @@
+<% provide(:title, @user.name) %>
+<div class="row">
+  <aside class="col-md-4">
+    <section class="user_info">
+      <h1>
+        <%= gravatar_for @user %>
+        <%= @user.name %>
+      </h1>
+      <h2>
+        <%= @user.email %>
+      </h2>
+    </section>
+  </aside>
+</div>
+<% if current_user.admin? %>
+  <% if not @user.admin? %>
+    <h1 style="text-align: left"> Job Status </h1>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Job Title</th>
+          <th></th>
+          <th>Current Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= will_paginate @jobs %>
+        <% @jobs.each do |job| %>
+          <tr>
+            <td><%= job.title %></td>
+            <td><%= link_to "Go to Job Description", job %></td>
+            <% if @user.job_ids.include? job.id %>
+              <td>Shown</td>
+            <% else %>
+              <td>Hidden</td>
+            <% end %>
+            <% if @user.job_ids.include? job.id %>
+              <td><%= link_to "Hide from Recruiter", remove_path(user_id: @user.id, job_id: job.id), method: 'post' %></td>
+            <% else %>
+              <td><%= link_to "Show Recruiter", allow_path(user_id: @user.id, job_id: job.id), method: 'post' %></td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+<% else %>
+  <h1 style="text-align: left"> Assigned Jobs </h1>
+  <% if @user.jobs.empty? %>
+    <div class="alert alert-danger">
+      No jobs found for this recruiter!
+    </div>
+  <% else %>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Job Title</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @jobs.each do |job| %>
+          <tr>
+            <% if @user.jobs.include? job %>
+              <td><%= job.title %></td>
+              <td><%= link_to "Go to Job Description", job %></td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+<% end %>
+
+
